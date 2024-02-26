@@ -5,12 +5,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { CreatelistComponent } from './createlist/createlist.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    CreatelistComponent
   ],
   imports: [
+    MatSlideToggleModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
