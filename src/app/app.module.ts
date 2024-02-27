@@ -5,16 +5,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { CreatelistComponent } from './createlist/createlist.component';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle'
+import { ViewlistComponent } from './viewlist/viewlist.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    CreatelistComponent
-  ],
+  declarations: [AppComponent, ViewlistComponent],
   imports: [
-    MatSlideToggleModule,
+    // Material
+    MatToolbarModule,
+    MatIconModule,
+    // ...
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -22,10 +23,10 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle'
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
-      registrationStrategy: 'registerWhenStable:30000'
-    })
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
