@@ -297,3 +297,13 @@ dist
 .history
 .ionide
 /.angular/
+
+
+### Firebase ###
+.idea
+**/node_modules/*
+**/.firebaserc
+
+### Firebase Patch ###
+.runtimeconfig.json
+.firebase/
