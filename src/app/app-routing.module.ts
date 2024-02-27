@@ -1,15 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CreatelistComponent } from './createlist/createlist.component';
+import { ViewlistComponent } from './viewlist/viewlist.component';
 
 const routes: Routes = [
-  // { path: '', redirectTo: 'createlist', pathMatch: 'full' },
-  {
-    path: 'createlist',
-    loadComponent: () =>
-      import('./createlist/createlist.component').then(
-        (m) => m.CreatelistComponent
-      ),
-  },
+  { path: '', redirectTo: 'create', pathMatch: 'full' },
+  { path: 'create', component: CreatelistComponent},
+  { path: 'view', component: ViewlistComponent},
 ];
 
 @NgModule({
