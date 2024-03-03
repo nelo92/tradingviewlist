@@ -5,8 +5,8 @@ import { ViewlistComponent } from './viewlist/viewlist.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'create', pathMatch: 'full' },
-  { path: 'create', component: CreatelistComponent},
-  { path: 'view', component: ViewlistComponent},
+  { path: 'create', component: CreatelistComponent },
+  { path: 'view', component: ViewlistComponent },
 ];
 
 @NgModule({

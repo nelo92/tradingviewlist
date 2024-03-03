@@ -1,9 +1,43 @@
-<br/>
+<br />
 <mat-form-field class="example-form-field">
   <mat-label>Symbol</mat-label>
-  <input matInput type="text" [(ngModel)]="value">
-  <button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
+  <input matInput type="text" [(ngModel)]="value" />
+  <button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value = ''">
     <mat-icon>close</mat-icon>
   </button>
 </mat-form-field>
 <button mat-raised-button (click)="onCreate()">Create</button>
+
+
+<!-- >>> start
+<div *ngFor="let list of lists$ | async">
+  <p>{{list.symbol}}</p>
+</div>
+>>> end -->
+
+<table mat-table #table
+  [dataSource]="dataSource"
+  class="mat-elevation-z8"
+  cdkDropList
+  [cdkDropListData]="dataSource"
+  (cdkDropListDropped)="onDropTable($event)">
+  <ng-container matColumnDef="position">
+    <th mat-header-cell *matHeaderCellDef>No.</th>
+    <td mat-cell *matCellDef="let element">{{ element.position }}</td>
+  </ng-container>
+  <ng-container matColumnDef="symbol">
+    <th mat-header-cell *matHeaderCellDef>Symbol</th>
+    <td mat-cell *matCellDef="let element">{{ element.symbol }}</td>
+  </ng-container>
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+    <td mat-cell *matCellDef="let element">
+      <!-- <mat-icon>more_vert</mat-icon> -->
+      <button type="button" (click)="onDelete(element)">Delete</button>
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"
+    cdkDrag [cdkDragData]="row"></tr>
+</table>
+<mat-paginator [pageSizeOptions]="[10, 50, 100]"></mat-paginator>
