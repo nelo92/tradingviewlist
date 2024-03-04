@@ -1,8 +1,7 @@
-import { moveItemInArray } from '@angular/cdk/drag-drop';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 
 import * as CONSTANTS from '../constants';
@@ -13,31 +12,22 @@ import { Lists } from '../models/firebase.models';
   templateUrl: './createlist.component.html',
   styleUrls: ['./createlist.component.css'],
 })
-export class CreatelistComponent implements OnInit { /**, AfterViewInit */
+export class CreatelistComponent implements OnInit {
+  /**, AfterViewInit */
   lists$: Observable<Lists[]> | undefined;
   dataSource = new MatTableDataSource<Lists>();
-  displayedColumns: string[] = ['position', 'symbol', 'actions'];
+  displayedColumns: string[] = ['order', 'symbol', 'actions'];
   value = 'Symbol';
 
   // @ViewChild(MatPaginator) paginator: MatPaginator;
-  // @ViewChild('table') table: MatTable<Lists>;
+  @ViewChild('table') table!: MatTable<Lists>;
 
-  constructor(private store: AngularFirestore) {
-
-  }
+  constructor(private store: AngularFirestore) {}
 
   ngOnInit(): void {
     console.log('init...');
-
-    this.lists$ = this.store
-      .collection<Lists>(CONSTANTS.COLLECTION_LISTS)
-      .valueChanges({ idField: 'id' });
-    this.lists$.subscribe((value) => {
-      console.log('resultat 2: ', value);
-      this.dataSource.data = value;
-      // this.dataSource.paginator = this.paginator;
-    });
-
+    this.lists$ = this.store.collection<Lists>(CONSTANTS.COLLECTION_LISTS).valueChanges({ idField: 'id' });
+    this.lists$.subscribe((value) => console.log('resultat 2: ', value));
     console.log('init.');
   }
   // ngAfterViewInit() {
@@ -65,30 +55,15 @@ export class CreatelistComponent implements OnInit { /**, AfterViewInit */
       .catch((error) => console.error('Error removing document: ', error));
     console.log('onDelete.');
   }
-  onDropTable(event: any) {
+
+  onDropTable(event: CdkDragDrop<MatTableDataSource<Lists>>) {
     console.log('onDropTable...');
-    console.log('event', event);
-    moveItemInArray(
-      this.dataSource.data,
-      event.previousIndex,
-      event.currentIndex
-    );
+    // console.log('event', event);
+    moveItemInArray( this.dataSource.data, event.previousIndex, event.currentIndex );
+    this.table.renderRows();
+
+
     console.log('onDropTable.');
   }
 
-  // onDropTable(event: CdkDragDrop<Lists[]>) {
-  //   console.log('onDropTable...');
-  //   console.log('event', event);
-  //   console.log('onDropTable.');
-
-  //   // moveItemInArray(
-  //   //   this.dataSource.data,
-  //   //   event.previousIndex,
-  //   //   event.currentIndex
-  //   // );
-
-  //   // const prevIndex = this.dataSource.findIndex((d) => d === event.item.data);
-  //   // moveItemInArray(this.dataSource, prevIndex, event.currentIndex);
-  //   // this.table.renderRows();
-  // }
 }
