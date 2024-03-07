@@ -1,15 +1,29 @@
+// Cas simple
 export interface Lists {
   id: string;
-  name: string;
+  name: string
   symbol: string;
-  // position: number;
   description: string;
   order: number;
-  // sections: Sections[];
-  // items: Items[];
 }
 
-export interface Sections {
-  name: string;
-  expanded: boolean;
-}
+// Cas complexe - Cible
+
+// export interface Lists {
+//   id: string;
+//   name: string
+//   Items: Items[];
+// }
+
+// export interface Items {
+//   id: string;
+//   name: string;
+//   description: string;
+//   order: number;
+//   sections: Sections[];
+// }
+
+// export interface Sections {
+//   name: string;
+//   expanded: boolean;
+// }

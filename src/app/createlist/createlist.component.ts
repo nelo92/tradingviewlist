@@ -17,8 +17,10 @@ export class CreatelistComponent implements OnInit {
   lists$: Observable<Lists[]> | undefined;
   dataSource = new MatTableDataSource<Lists>();
   displayedColumns: string[] = ['order', 'symbol', 'actions'];
-  value = 'Symbol';
+  value = '';
 
+//
+  // @ViewChild(MatPaginator) paginator: MatPaginator;
   // @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('table') table!: MatTable<Lists>;
 
@@ -27,7 +29,10 @@ export class CreatelistComponent implements OnInit {
   ngOnInit(): void {
     console.log('init...');
     this.lists$ = this.store.collection<Lists>(CONSTANTS.COLLECTION_LISTS).valueChanges({ idField: 'id' });
-    this.lists$.subscribe((value) => console.log('resultat 2: ', value));
+    this.lists$.subscribe((value) => {
+      console.log('resultat: ', value);
+      this.dataSource.data = value;
+    });
     console.log('init.');
   }
   // ngAfterViewInit() {
@@ -58,11 +63,9 @@ export class CreatelistComponent implements OnInit {
 
   onDropTable(event: CdkDragDrop<MatTableDataSource<Lists>>) {
     console.log('onDropTable...');
-    // console.log('event', event);
+    console.log('event', event);
     moveItemInArray( this.dataSource.data, event.previousIndex, event.currentIndex );
     this.table.renderRows();
-
-
     console.log('onDropTable.');
   }
 
