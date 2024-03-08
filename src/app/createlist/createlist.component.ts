@@ -8,6 +8,11 @@ import * as CONSTANTS from '../constants';
 import { Lists } from '../models/firebase.models';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
+interface List {
+  value: string;
+  viewValue: string;
+}
+
 @Component({
   selector: 'app-createlist',
   templateUrl: './createlist.component.html',
@@ -26,6 +31,13 @@ export class CreatelistComponent implements OnInit {
   formCreate: FormGroup = this.formBuilder.group({
     symbol: [null, Validators.required],
   });
+
+  lists: List[] = [
+    { value: 'list-0', viewValue: CONSTANTS.LIST_DEFAULT_NAME },
+    // { value: 'list-1', viewValue: 'LIST1' },
+    // { value: 'list-2', viewValue: 'LIST2' },
+  ];
+  selectedList = this.lists[0].value;
 
   constructor(
     private store: AngularFirestore,
