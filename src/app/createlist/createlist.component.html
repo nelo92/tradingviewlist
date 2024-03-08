@@ -12,9 +12,9 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item>
+          <button mat-menu-item (click)="onOpenDialog()">
             <mat-icon>add_circle</mat-icon>
-            <span>Add</span>
+            <span>Create</span>
           </button>
           <button mat-menu-item disabled>
             <mat-icon>remove_circle</mat-icon>

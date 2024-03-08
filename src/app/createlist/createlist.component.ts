@@ -1,16 +1,33 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
+import {
+  MatDialog,
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogTitle,
+  MatDialogContent,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogModule,
+} from '@angular/material/dialog';
 
 import * as CONSTANTS from '../constants';
 import { Lists } from '../models/firebase.models';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 interface List {
   value: string;
   viewValue: string;
+}
+
+export interface DialogData {
+  element: string;
 }
 
 @Component({
@@ -41,7 +58,8 @@ export class CreatelistComponent implements OnInit {
 
   constructor(
     private store: AngularFirestore,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -103,6 +121,18 @@ export class CreatelistComponent implements OnInit {
     console.log('onClick.');
   }
 
+  onOpenDialog(): void {
+    console.log('onOpenDialog...');
+     const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+       data: { element: '' },
+     });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
+      console.log('result: ', result);
+    });
+    console.log('onOpenDialog.');
+  }
+
   generateLink(symbol: string): string {
     return (
       CONSTANTS.TRADINGVIEW_SYMBOL_LINK +
@@ -110,5 +140,28 @@ export class CreatelistComponent implements OnInit {
       CONSTANTS.TRADINGVIEW_SYMBOL_LINK_SEP +
       symbol
     );
+  }
+}
+
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  templateUrl: './dialog-overview-example-dialog.html',
+  standalone: true,
+  imports: [
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+    MatButtonModule,
+  ],
+})
+export class DialogOverviewExampleDialog {
+  constructor(
+    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData
+  ) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 }

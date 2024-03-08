@@ -21,10 +21,10 @@ import { environment } from 'src/environments/environment.development';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CreatelistComponent } from './createlist/createlist.component';
-import { ViewlistComponent } from './viewlist/viewlist.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
-  declarations: [AppComponent, CreatelistComponent, ViewlistComponent],
+  declarations: [AppComponent, CreatelistComponent],
   imports: [
     // Common
     NgIf,
@@ -38,6 +38,7 @@ import { ViewlistComponent } from './viewlist/viewlist.component';
     MatMenuModule,
     MatTableModule,
     MatPaginatorModule,
+    MatDialogModule,
     // Forms
     FormsModule,
     ReactiveFormsModule,
