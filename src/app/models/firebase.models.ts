@@ -1,7 +1,7 @@
 // Cas simple
 export interface Lists {
   id: string;
-  name: string
+  name: string;
   symbol: string;
   description: string;
   order: number;
