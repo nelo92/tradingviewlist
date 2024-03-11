@@ -1,11 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { CreatelistComponent } from './createlist/createlist.component';
-
 const routes: Routes = [
-  { path: '', redirectTo: 'create', pathMatch: 'full' },
-  { path: 'create', component: CreatelistComponent },
+  // { path: '', redirectTo: 'create', pathMatch: 'full' },
+  // { path: 'create', component: CreatelistComponent },
+  { path: '', pathMatch: 'full', redirectTo: 'list' },
+  {
+    path: 'list',
+    loadChildren: () => import('./list/list.module').then((m) => m.ListModule),
+  },
 ];
 
 @NgModule({
