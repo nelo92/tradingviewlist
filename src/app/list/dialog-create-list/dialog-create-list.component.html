@@ -1,1 +1,11 @@
-<p>dialog-create-list works!</p>
+<h2 mat-dialog-title>Create list</h2>
+<mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput value="{{data.element}}">
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data.element" cdkFocusInitial>Create</button>
+</mat-dialog-actions>
