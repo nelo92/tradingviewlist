@@ -4,13 +4,11 @@
     <mat-form-field>
       <mat-label>Name</mat-label>
       <input matInput required formControlName="name">
-      <!-- [formControl]="valueFormControl" -->
-      <!-- [(ngModel)]="data.element" -->
     </mat-form-field>
   </mat-dialog-content>
   <mat-dialog-actions align="center">
     <button mat-button (click)="onCancel()">Cancel</button>
     <button mat-button cdkFocusInitial type="submit" [disabled]="!formCreate.valid">Create</button>
-    <!-- [mat-dialog-close]="data.element" -->
   </mat-dialog-actions>
 </form>
+
