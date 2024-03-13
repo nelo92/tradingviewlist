@@ -1,20 +1,14 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { Observable } from 'rxjs';
 
 import * as CONSTANTS from '../../constants';
-import { Lists } from '../../models/firebase.models';
+import { List, Symbol } from '../../models/firebase.models';
 import { DialogCreateListComponent } from '../dialog-create-list/dialog-create-list.component';
 import { ListService } from '../list.service';
-
-interface List {
-  value: string;
-  viewValue: string;
-}
 
 export interface DialogCreateListData {
   element: string;
@@ -24,75 +18,82 @@ export interface DialogCreateListData {
   selector: 'app-view-list',
   templateUrl: './view-list.component.html',
 })
-export class ViewListComponent implements OnInit {
-  /**, AfterViewInit */
+export class ViewListComponent implements OnInit, AfterViewInit {
+  selectFormControl = new FormControl(null, Validators.required);
 
-  // lists$: Observable<Lists[]> | undefined;
-  dataSource = new MatTableDataSource<Lists>();
-  displayedColumns: string[] = ['symbol', 'actions'];
-
-  // @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild('table') table!: MatTable<Lists>;
-
-  formCreate: FormGroup = this.formBuilder.group({
+  formSymbol: FormGroup = this.formBuilder.group({
     symbol: [null, Validators.required],
   });
 
-  lists: List[] = [
-    { value: 'list-0', viewValue: CONSTANTS.LIST_DEFAULT_NAME },
-    // { value: 'list-1', viewValue: 'LIST1' },
-    // { value: 'list-2', viewValue: 'LIST2' },
-  ];
-  selectedList = this.lists[0].value;
+  dataSource = new MatTableDataSource<Symbol>();
+
+  displayedColumns: string[] = ['symbol', 'actions'];
+
+  @ViewChild('table') table: MatTable<Symbol> | undefined;
+
+  // @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  lists: List[] = [];
+  selectedList: string = CONSTANTS.LIST_DEFAULT_NAME;
 
   constructor(
     private store: AngularFirestore,
     private formBuilder: FormBuilder,
     private dialog: MatDialog,
     private listService: ListService
-  ) {
-    console.log('constructor...');
-  }
+  ) {}
 
   ngOnInit(): void {
     console.log('init...');
-    // this.lists$ = this.store
-    //   .collection<Lists>(CONSTANTS.COLLECTION_LISTS)
-    //   .valueChanges({ idField: 'id' });
-
-    // this.lists$ = this.listService.loadList();
-    // this.lists$.subscribe((value) => {
-    //   console.log('resultat: ', value);
-    //   this.dataSource.data = value;
-    // });
-
     this.listService.loadList().subscribe((value) => {
-        console.log('resultat: ', value);
-        this.dataSource.data = value;
+      console.log('list resultat: ', value);
+      this.lists = value;
+      this.listService
+        .loadSymbolOfList(this.selectedList)
+        .subscribe((value) => {
+          console.log('list symbol: ', value);
+          this.dataSource.data = value;
+        });
     });
     console.log('init.');
   }
-  // ngAfterViewInit() {
-  //       this.dataSource.paginator = this.paginator;
-  // }
 
-  onSubmitCreate() {
-    console.log('onSubmitCreate...');
-    if (this.formCreate.valid) {
-      let value = this.formCreate.value.symbol;
-      this.listService.createSymbol(value);
-      this.formCreate.reset();
+  ngAfterViewInit() {
+    // this.dataSource.paginator = this.paginator;
+  }
+
+  onChangeList() {
+    console.log('onChangeList...');
+    if (this.selectedList) {
+      this.listService
+        .loadSymbolOfList(this.selectedList)
+        .subscribe((value) => {
+          console.log('list symbol: ', value);
+          this.dataSource.data = value;
+        });
     }
   }
 
-  onDelete(elt: Lists) {
-    console.log('onDelete...');
-    console.log('elt', elt);
-    this.listService.deleteSymbol(elt.id);
-    console.log('onDelete.');
+  onCreateSymbol() {
+    console.log('onCreateSymbol...');
+    if (this.formSymbol.valid) {
+      const symbol = this.formSymbol.value.symbol;
+      const list = this.selectFormControl.value!;
+      this.listService.createSymbolForList(symbol, list);
+      this.formSymbol.reset();
+    }
   }
 
-  onDropTable(event: CdkDragDrop<MatTableDataSource<Lists>>) {
+  onDeleteSymbol(elt: Symbol) {
+    console.log('onDeleteSymbol...');
+    console.log('elt', elt);
+    if (this.selectedList) {
+      this.listService.deleteSymbol(this.selectedList, elt.id);
+    }
+    console.log('onDeleteSymbol.');
+  }
+
+  onDropTable(event: CdkDragDrop<MatTableDataSource<Symbol>>) {
     console.log('onDropTable...');
     console.log('event', event);
     moveItemInArray(
@@ -100,27 +101,28 @@ export class ViewListComponent implements OnInit {
       event.previousIndex,
       event.currentIndex
     );
-    this.table.renderRows();
+    this.table?.renderRows();
     console.log('onDropTable.');
   }
 
-  onClick(elt: Lists) {
-    console.log('onClick...');
+  onClickSymbol(elt: Symbol) {
+    console.log('onClickSymbol...');
     console.log('elt', elt);
-    window.open(this.generateLink(elt.symbol), '_blank');
-    console.log('onClick.');
+    window.open(this.generateLink(elt.name), '_blank');
+    console.log('onClickSymbol.');
   }
 
-  onOpenDialog(): void {
-    console.log('onOpenDialog...');
+  onOpenDialogCreateList(): void {
+    console.log('onOpenDialogCreateList...');
     const dialogRef = this.dialog.open(DialogCreateListComponent, {
       data: { element: '' },
     });
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
       console.log('result: ', result);
+      this.selectedList = result
     });
-    console.log('onOpenDialog.');
+    console.log('onOpenDialogCreateList.');
   }
 
   generateLink(symbol: string): string {

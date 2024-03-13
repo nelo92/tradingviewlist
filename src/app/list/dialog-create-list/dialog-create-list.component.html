@@ -3,7 +3,7 @@
   <mat-dialog-content>
     <mat-form-field>
       <mat-label>Name</mat-label>
-      <input matInput required formControlName="name">
+      <input matInput required formControlName="name" oninput="this.value = this.value.toUpperCase()">
     </mat-form-field>
   </mat-dialog-content>
   <mat-dialog-actions align="center">

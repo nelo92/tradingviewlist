@@ -30,6 +30,7 @@ export class DialogCreateListComponent {
     console.log('onCreate');
     if (this.formCreate.valid) {
       this.data.element = this.formCreate.value.name;
+      this.listService.createList(this.data.element);
       this.dialogRef.close(this.data.element);
     }
   }
