@@ -16,7 +16,7 @@
             <mat-icon>add_circle</mat-icon>
             <span>Create</span>
           </button>
-          <button mat-menu-item type="button" disabled>
+          <button mat-menu-item type="button" [disabled]="disabledDeleteList" (click)="onDeleteList()">
             <mat-icon>remove_circle</mat-icon>
             <span>Delete</span>
           </button>
