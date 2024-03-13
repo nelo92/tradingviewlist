@@ -7,6 +7,6 @@ import { environment } from 'src/environments/environment.development';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  appName = 'tradingviewlist';
+  appName = 'Tradingview List';
   version: string = environment.version;
 }
