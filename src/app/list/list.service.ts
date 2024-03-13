@@ -36,6 +36,24 @@ export class ListService {
     return list$;
   }
 
+  deleteList(list: string) {
+    this.store
+      .doc(`${CONSTANTS.COLLECTION_LISTS}/${list}`)
+      .collection(CONSTANTS.COLLECTION_SYMBOLS)
+      .ref.get()
+      .then((qry) => {
+        qry.forEach((doc) => {
+          doc.ref.delete();
+        });
+      });
+    this.store
+      .doc(`${CONSTANTS.COLLECTION_LISTS}/${list}`)
+      .delete()
+      .then(() => console.log('Document successfully deleted!'))
+      .catch((error) => console.error('Error removing document: ', error));
+  }
+
+
   // -- Symbol --
 
   loadSymbolOfList(list: string): Observable<Symbol[]> {
@@ -50,39 +68,21 @@ export class ListService {
     this.store
       .collection(
         `${CONSTANTS.COLLECTION_LISTS}/${list}/${CONSTANTS.COLLECTION_SYMBOLS}`
-      )
-      .add({ name: symbol })
-      .then((doc) => console.log('Document written with ID: ', doc.id))
+    )
+      .doc(symbol)
+      .set({ name: symbol })
+      .then((doc) => console.log('Document written with ID: ', symbol))
       .catch((error) => console.error('Error adding document: ', error));
   }
 
-  // createSymbol(value: string) {
-  //   this.store
-  //     .collection(CONSTANTS.COLLECTION_LISTS)
-  //     .add({ symbol: value })
-  //     .then((doc) => console.log('Document written with ID: ', doc.id))
-  //     .catch((error) => console.error('Error adding document: ', error));
-  // }
   deleteSymbol(list: string, id: string) {
-      this.store
-        .doc(`${CONSTANTS.COLLECTION_LISTS}/${list}/${CONSTANTS.COLLECTION_SYMBOLS}/${id}`)
-        .delete()
-        .then(() => console.log('Document successfully deleted!'))
-        .catch((error) => console.error('Error removing document: ', error));
+    this.store
+      .doc(
+        `${CONSTANTS.COLLECTION_LISTS}/${list}/${CONSTANTS.COLLECTION_SYMBOLS}/${id}`
+      )
+      .delete()
+      .then(() => console.log('Document successfully deleted!'))
+      .catch((error) => console.error('Error removing document: ', error));
   }
-  // createSymbol(value: string) {
-  //   this.store
-  //     .collection(CONSTANTS.COLLECTION_LISTS)
-  //     .add({ symbol: value })
-  //     .then((doc) => console.log('Document written with ID: ', doc.id))
-  //     .catch((error) => console.error('Error adding document: ', error));
-  // }
-  // deleteSymbol(id: string) {
-  //   this.store
-  //     .collection(CONSTANTS.COLLECTION_LISTS)
-  //     .doc(id)
-  //     .delete()
-  //     .then(() => console.log('Document successfully deleted!'))
-  //     .catch((error) => console.error('Error removing document: ', error));
-  // }
+
 }

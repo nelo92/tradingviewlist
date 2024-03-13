@@ -16,7 +16,7 @@
             <mat-icon>add_circle</mat-icon>
             <span>Create</span>
           </button>
-          <button mat-menu-item type="button" disabled>
+          <button mat-menu-item type="button" [disabled]="disabledDeleteList" (click)="onDeleteList()">
             <mat-icon>remove_circle</mat-icon>
             <span>Delete</span>
           </button>
@@ -28,7 +28,7 @@
       <form [formGroup]="formSymbol" (ngSubmit)="onCreateSymbol()">
         <mat-form-field class="example-form-field">
           <mat-label>Symbol</mat-label>
-          <input matInput type="text" formControlName="symbol" oninput="this.value = this.value.toUpperCase()" />
+          <input matInput type="text" formControlName="symbol" oninput="this.value = this.value.toUpperCase()" title="name of symbol"/>
         </mat-form-field>
         <button mat-icon-button type="submit" [disabled]="!formSymbol.valid">
           <mat-icon>add_box</mat-icon>

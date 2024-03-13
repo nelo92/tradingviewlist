@@ -35,6 +35,7 @@ export class ViewListComponent implements OnInit, AfterViewInit {
 
   lists: List[] = [];
   selectedList: string = CONSTANTS.LIST_DEFAULT_NAME;
+  disabledDeleteList: boolean = true;
 
   constructor(
     private store: AngularFirestore,
@@ -64,14 +65,23 @@ export class ViewListComponent implements OnInit, AfterViewInit {
 
   onChangeList() {
     console.log('onChangeList...');
-    if (this.selectedList) {
-      this.listService
-        .loadSymbolOfList(this.selectedList)
-        .subscribe((value) => {
-          console.log('list symbol: ', value);
-          this.dataSource.data = value;
-        });
-    }
+    this.listService.loadSymbolOfList(this.selectedList).subscribe((value) => {
+      console.log('list symbol: ', value);
+      this.dataSource.data = value;
+    });
+    this.setDisabledDeleteList();
+  }
+
+  setDisabledDeleteList() {
+     this.disabledDeleteList = this.selectedList == CONSTANTS.LIST_DEFAULT_NAME;
+  }
+
+  onDeleteList() {
+    console.log('onDeleteList...');
+    this.listService.deleteList(this.selectedList);
+    this.selectedList = CONSTANTS.LIST_DEFAULT_NAME;
+    this.onChangeList();
+    console.log('onDeleteList.');
   }
 
   onCreateSymbol() {
@@ -87,9 +97,7 @@ export class ViewListComponent implements OnInit, AfterViewInit {
   onDeleteSymbol(elt: Symbol) {
     console.log('onDeleteSymbol...');
     console.log('elt', elt);
-    if (this.selectedList) {
-      this.listService.deleteSymbol(this.selectedList, elt.id);
-    }
+    this.listService.deleteSymbol(this.selectedList, elt.id);
     console.log('onDeleteSymbol.');
   }
 
@@ -120,7 +128,8 @@ export class ViewListComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed');
       console.log('result: ', result);
-      this.selectedList = result
+      this.selectedList = result;
+      this.setDisabledDeleteList();
     });
     console.log('onOpenDialogCreateList.');
   }
