@@ -1,29 +1,32 @@
 <div class="container">
   <div class="row">
-
     <div class="col">
       <form>
-        <mat-form-field>
-          <mat-select [formControl]="selectFormControl" [(ngModel)]="selectedList" (selectionChange)="onChangeList()" required>
-            <mat-option [value]="option.id" *ngFor="let option of lists">{{ option.name }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <button mat-icon-button type="button" [matMenuTriggerFor]="menu">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item type="button" (click)="onOpenDialogCreateList()">
-            <mat-icon>add_circle</mat-icon>
-            <span>Create</span>
+        <div class="d-flex flex-row">
+          <mat-form-field>
+            <mat-select [formControl]="selectFormControl" [(ngModel)]="selectedList" (selectionChange)="onChangeList()"
+              required>
+              <mat-option [value]="option.id" *ngFor="let option of lists">{{ option.name }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <button mat-icon-button type="button" [matMenuTriggerFor]="menu">
+            <mat-icon>more_vert</mat-icon>
           </button>
-          <button mat-menu-item type="button" [disabled]="disabledDeleteList" (click)="onDeleteList()">
-            <mat-icon>remove_circle</mat-icon>
-            <span>Delete</span>
-          </button>
-        </mat-menu>
+        </div>
+        <div class="d-flex flex-row">
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item type="button" (click)="onOpenDialogCreateList()">
+              <mat-icon>add_circle</mat-icon>
+              <span>Create</span>
+            </button>
+            <button mat-menu-item type="button" [disabled]="disabledDeleteList" (click)="onDeleteList()">
+              <mat-icon>remove_circle</mat-icon>
+              <span>Delete</span>
+            </button>
+          </mat-menu>
+        </div>
       </form>
     </div>
-
     <div class="col">
       <form [formGroup]="formSymbol" (ngSubmit)="onCreateSymbol()">
         <mat-form-field class="example-form-field">
@@ -35,7 +38,6 @@
         </button>
       </form>
     </div>
-
   </div>
 </div>
 
